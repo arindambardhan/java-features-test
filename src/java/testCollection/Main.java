@@ -1,31 +1,28 @@
 package testCollection;
 
-import testCollection.service.*;
-import testCollection.point.*;
+import testCollection.collection_factory.CollectionFactory;
+import testCollection.point.Point;
+import testCollection.service.PointCollectionService;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("=== ArrayList ===");
+        benchmark("HashSet",       new PointCollectionService(CollectionFactory::createHashSet));
+        benchmark("TreeSet",       new PointCollectionService(CollectionFactory::createTreeSet));
+        benchmark("ArrayList",     new PointCollectionService(CollectionFactory::createArrayList));
+        benchmark("LinkedHashSet", new PointCollectionService(CollectionFactory::createLinkedHashSet));
+    }
 
-        PointArrayListService arrayListService = new PointArrayListService();
-        System.out.println("Collection Size: " + normalize(arrayListService.getSize()));
+    private static void benchmark(String label, PointCollectionService service) {
+        Point point = service.getPoint();
+
+        System.out.println("=== " + label + " ===");
+        System.out.println("Collection Size: " + normalize(service.getSize()));
 
         long start = System.nanoTime();
-        boolean pointByIdFromList = arrayListService.isPointExists(arrayListService.getPoint());
-        System.out.println("Time taken by ArrayList " + elapsed(start) + " microseconds");
-        System.out.println("IsThere: " + pointByIdFromList);
-
-        System.out.println("=== HashSet ===");
-
-        PointHashSetService hashSetService = new PointHashSetService();
-        System.out.println("Collection Size: " + normalize(hashSetService.getSize()));
-
-        start = System.nanoTime();
-
-        boolean byIdFromSet = hashSetService.isPointExists(hashSetService.getPoint());
-        System.out.println("Time taken by HashSet " + elapsed(start) + " microseconds");
-        System.out.println("IsThere: " + byIdFromSet);
+        boolean found = service.isPointExists(point);
+        System.out.println("Time taken by " + label + ": " + elapsed(start) + " microseconds");
+        System.out.println("IsThere: " + found);
     }
 
     private static long elapsed(long startNano) {

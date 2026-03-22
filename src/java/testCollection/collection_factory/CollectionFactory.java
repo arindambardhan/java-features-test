@@ -2,11 +2,7 @@ package testCollection.collection_factory;
 
 import testCollection.point.Point;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class CollectionFactory {
 
@@ -19,6 +15,14 @@ public class CollectionFactory {
 
     public static Set<Point> createHashSet() {
         return new HashSet<>(generatePoints());
+    }
+
+    public static Set<Point> createLinkedHashSet() {
+        return new LinkedHashSet<>(generatePoints());
+    }
+
+    public static Set<Point> createTreeSet() {
+        return new TreeSet<>(generatePoints());
     }
 
     private static List<Point> generatePoints() {
